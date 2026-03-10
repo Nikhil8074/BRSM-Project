@@ -69,9 +69,6 @@ for file in all_files:
 print(f"Loaded {len(records)} participant files.\n")
 all_results = {}
 
-# ══════════════════════════════════════════════════════════════
-# HYPOTHESIS 1 – Overall Accuracy & Response Time
-# ══════════════════════════════════════════════════════════════
 print("=" * 60)
 print("HYPOTHESIS 1: Overall Accuracy & Response Time")
 print("=" * 60)
@@ -95,9 +92,6 @@ res1.append(run_ttest(nb_rt, ab_rt,   "Response Time: NB < AB (H0: no diff)", ta
 pd.DataFrame(res1).to_csv(os.path.join(out_dir, 'h1_ttest_results.csv'), index=False)
 print("  -> Saved: h1_ttest_results.csv\n")
 
-# ══════════════════════════════════════════════════════════════
-# HYPOTHESIS 2 – Accuracy by Frame Type (BB and EM separately)
-# ══════════════════════════════════════════════════════════════
 print("=" * 60)
 print("HYPOTHESIS 2: Accuracy Across Frame Types")
 print("=" * 60)
@@ -117,16 +111,12 @@ res2 = []
 for ft, label in [('BB', 'Before Boundary'), ('EM', 'Event Middle')]:
     nb = h2[(h2.condition=='NB') & (h2.FrameType==ft)]['Accuracy']
     ab = h2[(h2.condition=='AB') & (h2.FrameType==ft)]['Accuracy']
-    # BB: directional (NB > AB); EM: two-tailed (no expected difference)
     tail = 'greater' if ft == 'BB' else 'two-sided'
     res2.append(run_ttest(nb, ab, f"Accuracy ({label}): NB vs AB", tail=tail))
 
 pd.DataFrame(res2).to_csv(os.path.join(out_dir, 'h2_ttest_results.csv'), index=False)
 print("  -> Saved: h2_ttest_results.csv\n")
 
-# ══════════════════════════════════════════════════════════════
-# HYPOTHESIS 3 – Confidence by Correctness
-# ══════════════════════════════════════════════════════════════
 print("=" * 60)
 print("HYPOTHESIS 3: Confidence and Correctness")
 print("=" * 60)
@@ -156,9 +146,6 @@ for corr_label, tail in [('Correct', 'greater'), ('Incorrect', 'two-sided')]:
 pd.DataFrame(res3).to_csv(os.path.join(out_dir, 'h3_ttest_results.csv'), index=False)
 print("  -> Saved: h3_ttest_results.csv\n")
 
-# ══════════════════════════════════════════════════════════════
-# HYPOTHESIS 4 – Confidence by Frame Type (BB and EM separately)
-# ══════════════════════════════════════════════════════════════
 print("=" * 60)
 print("HYPOTHESIS 4: Confidence Calibration Across Frame Types")
 print("=" * 60)
@@ -180,21 +167,16 @@ res4 = []
 for ft, label in [('BB', 'Before Boundary'), ('EM', 'Event Middle')]:
     nb = h4[(h4.condition=='NB') & (h4.FrameType==ft)]['Confidence']
     ab = h4[(h4.condition=='AB') & (h4.FrameType==ft)]['Confidence']
-    # BB: directional (AB < NB); EM: two-tailed (no expected difference)
     tail = 'greater' if ft == 'BB' else 'two-sided'
     res4.append(run_ttest(nb, ab, f"Confidence ({label}): NB vs AB", tail=tail))
 
 pd.DataFrame(res4).to_csv(os.path.join(out_dir, 'h4_ttest_results.csv'), index=False)
 print("  -> Saved: h4_ttest_results.csv\n")
 
-# ══════════════════════════════════════════════════════════════
-# HYPOTHESIS 5 – Demographics: Gender vs Accuracy
-# ══════════════════════════════════════════════════════════════
 print("=" * 60)
 print("HYPOTHESIS 5: Demographic Factors (Gender)")
 print("=" * 60)
 
-# Load demographics
 demo_df = pd.read_excel(demo_path)
 demo_df.columns = demo_df.columns.astype(str).str.strip()
 
@@ -209,7 +191,6 @@ demo_df = demo_df[demo_df['SubNum'] > 13]
 exclude_nums = [42, 151, 36, 161, 32]
 demo_df = demo_df[~demo_df['SubNum'].isin(exclude_nums)]
 
-# Build accuracy df
 h5_acc = []
 for r in records:
     t = r['trials']
@@ -223,12 +204,9 @@ merged['Gender'] = merged['Gender'].astype(str).str.strip().str.title()
 merged['Handedness'] = merged['Handedness'].astype(str).str.strip().str.title()
 
 res5 = []
-# Gender
 male_acc   = merged[merged['Gender']=='Male']['Accuracy']
 female_acc = merged[merged['Gender']=='Female']['Accuracy']
 res5.append(run_ttest(male_acc, female_acc, "Accuracy: Male vs Female", tail='two-sided'))
-
-# Handedness
 right_acc = merged[merged['Handedness']=='Right Handed']['Accuracy']
 left_acc  = merged[merged['Handedness']=='Left Handed']['Accuracy']
 res5.append(run_ttest(right_acc, left_acc, "Accuracy: Right-Handed vs Left-Handed", tail='two-sided'))
