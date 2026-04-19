@@ -87,7 +87,7 @@ def rich_stats(series):
 stats_df = df_res.groupby(['Condition', 'FrameType'])['Confidence'].apply(rich_stats).unstack()
 print(stats_df)
 
-out_dir = '/home/nikhil.repala/BRSM/Project/plots'
+out_dir = '/home/nikhil.repala/BRSM/Project/Plots_Stats_Test_Results'
 os.makedirs(out_dir, exist_ok=True)
 stats_path = os.path.join(out_dir, 'h4_descriptive_stats.csv')
 stats_df.to_csv(stats_path)
@@ -100,15 +100,16 @@ fig1, ax1 = plt.subplots(figsize=(10, 7))
 fig1.patch.set_facecolor('#ffffff')
 ax1.set_facecolor('#f9f9f9')
 
-sns.boxplot(data=df_res, x='FrameType', y='Confidence', hue='Condition', ax=ax1, 
-            palette=palette, width=0.5, dodge=True, fliersize=0, linewidth=1.5, zorder=2)
+# Confidence Violin Plot per Frame Type
+sns.violinplot(data=df_res, x='FrameType', y='Confidence', hue='Condition', ax=ax1, 
+               palette=palette, split=True, inner='quartile', linewidth=1.5, zorder=2)
 sns.stripplot(data=df_res, x='FrameType', y='Confidence', hue='Condition', ax=ax1, 
-              palette=palette, dodge=True, size=4, alpha=0.5, jitter=True, zorder=3)
+              color='black', alpha=0.3, jitter=True, dodge=True, zorder=3)
 
 handles, labels = ax1.get_legend_handles_labels()
 ax1.legend(handles[:2], labels[:2], title='Video Condition', fontsize=12, title_fontsize=13, loc='lower right')
 
-ax1.set_title('Confidence Distribution by Frame Type (Box + Points)', fontsize=16, fontweight='bold', pad=15)
+ax1.set_title('Confidence Distribution by Frame Type (H4)', fontsize=16, fontweight='bold', pad=15)
 ax1.set_ylabel('Participant Confidence Rating (1-5)', fontsize=14)
 ax1.set_xlabel('Frame Type', fontsize=14)
 ax1.set_ylim(1, 5.5)
@@ -119,9 +120,9 @@ for spine in ax1.spines.values():
     spine.set_color('black')
     spine.set_linewidth(1.5)
 
-out_path1 = os.path.join(out_dir, 'h4_conf_frametype_boxstrip.png')
+out_path1 = os.path.join(out_dir, 'h4_conf_frametype_boxstrip.png') # Original name
 fig1.savefig(out_path1, dpi=300, bbox_inches='tight')
-print(f"Saved Hypothesis 4 Box+Strip Plot to {out_path1}")
+print(f"Saved Hypothesis 4 Violin Plot to {out_path1}")
 plt.close(fig1)
 
 fig2, ax2 = plt.subplots(figsize=(8, 6))
@@ -129,10 +130,10 @@ fig2.patch.set_facecolor('#ffffff')
 ax2.set_facecolor('#f9f9f9')
 
 sns.pointplot(data=df_res, x='FrameType', y='Confidence', hue='Condition', ax=ax2, 
-              palette=palette, dodge=True, markers=['o', 's'], capsize=.1, err_kws={'linewidth': 1.5})
+              palette=palette, dodge=True, markers=['o', 's'], capsize=.1, errorbar=('ci', 95))
             
-ax2.set_title('Confidence Interaction: Frame Type x Condition (Point)', fontsize=16, fontweight='bold', pad=15)
-ax2.set_ylabel('Mean Confidence Rating (1-5)', fontsize=14)
+ax2.set_title('Confidence Interaction: Frame Type x Condition (95% CI)', fontsize=16, fontweight='bold', pad=15)
+ax2.set_ylabel('Mean Confidence Rating (95% CI)', fontsize=14)
 ax2.set_xlabel('Frame Type', fontsize=14)
 ax2.set_ylim(3.8, 4.4) 
 ax2.tick_params(labelsize=12)
@@ -145,5 +146,5 @@ for spine in ax2.spines.values():
 
 out_path2 = os.path.join(out_dir, 'h4_conf_frametype_pointplot.png')
 fig2.savefig(out_path2, dpi=300, bbox_inches='tight')
-print(f"Saved Hypothesis 4 Point Plot to {out_path2}")
+print(f"Saved Hypothesis 4 Point Plot (95% CI) to {out_path2}")
 plt.close(fig2)

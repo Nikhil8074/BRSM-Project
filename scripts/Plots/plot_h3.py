@@ -89,7 +89,7 @@ def rich_stats(series):
 stats_df = df_res.groupby(['Condition', 'Correctness'])['Confidence'].apply(rich_stats).unstack()
 print(stats_df)
 
-out_dir = '/home/nikhil.repala/BRSM/Project/plots'
+out_dir = '/home/nikhil.repala/BRSM/Project/Plots_Stats_Test_Results'
 os.makedirs(out_dir, exist_ok=True)
 stats_path = os.path.join(out_dir, 'h3_descriptive_stats.csv')
 stats_df.to_csv(stats_path)
@@ -103,7 +103,7 @@ fig1.patch.set_facecolor('#ffffff')
 ax1.set_facecolor('#f9f9f9')
 
 sns.violinplot(data=df_res, x='Correctness', y='Confidence', hue='Condition', ax=ax1, 
-               palette=palette, split=True, inner=None, linewidth=1.5, zorder=2)
+               palette=palette, split=True, inner='quartile', linewidth=1.5, zorder=2)
 
 handles, labels = ax1.get_legend_handles_labels()
 ax1.legend(title='Video Condition', fontsize=12, title_fontsize=13, loc='lower left')
@@ -129,10 +129,10 @@ fig2.patch.set_facecolor('#ffffff')
 ax2.set_facecolor('#f9f9f9')
 
 sns.barplot(data=df_res, x='Correctness', y='Confidence', hue='Condition', ax=ax2, 
-            palette=palette, capsize=.1, err_kws={'linewidth': 1.5}, edgecolor='black', zorder=2)
+            palette=palette, capsize=.1, errorbar=('ci', 95), edgecolor='black', zorder=2)
 
-ax2.set_title('Confidence: Correctness x Condition (Bar)', fontsize=16, fontweight='bold', pad=15)
-ax2.set_ylabel('Mean Confidence Rating (1-5)', fontsize=14)
+ax2.set_title('Confidence: Correctness x Condition (95% CI)', fontsize=16, fontweight='bold', pad=15)
+ax2.set_ylabel('Mean Confidence Rating (95% CI)', fontsize=14)
 ax2.set_xlabel('Response Correctness', fontsize=14)
 ax2.tick_params(labelsize=12)
 ax2.legend(title='Video Condition', fontsize=12, title_fontsize=13, loc='upper right')
@@ -144,5 +144,5 @@ for spine in ax2.spines.values():
 
 out_path2 = os.path.join(out_dir, 'h3_conf_correctness_barplot.png')
 fig2.savefig(out_path2, dpi=300, bbox_inches='tight')
-print(f"Saved Hypothesis 3 Bar Plot to {out_path2}")
+print(f"Saved Hypothesis 3 Bar Plot (95% CI) to {out_path2}")
 plt.close(fig2)

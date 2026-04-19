@@ -89,6 +89,9 @@ stats_path = os.path.join(out_dir, 'h1_descriptive_stats.csv')
 stats_df.to_csv(stats_path)
 print(f"Saved descriptive statistics to {stats_path}")
 
+out_dir = '/home/nikhil.repala/BRSM/Project/Plots_Stats_Test_Results'
+os.makedirs(out_dir, exist_ok=True)
+
 plt.style.use('seaborn-v0_8-whitegrid')
 fig1, ax1 = plt.subplots(figsize=(8, 6))
 fig1.patch.set_facecolor('#ffffff')
@@ -96,7 +99,8 @@ ax1.set_facecolor('#f9f9f9')
 
 palette = {'Natural Cut (NB)': '#4C72B0', 'Abrupt Cut (AB)': '#C44E52'}
 
-sns.boxplot(data=df_res, x='Condition', y='Accuracy', ax=ax1, palette=palette, width=0.5, zorder=2)
+# Accuracy Violin Plot
+sns.violinplot(data=df_res, x='Condition', y='Accuracy', ax=ax1, palette=palette, inner='quartile', zorder=2)
 sns.stripplot(data=df_res, x='Condition', y='Accuracy', ax=ax1, color='black', alpha=0.3, jitter=True, zorder=3)
 ax1.set_title('Overall Recognition Accuracy (H1)', fontsize=16, fontweight='bold', pad=15)
 ax1.set_ylabel('Participant Accuracy (Proportion Correct)', fontsize=14)
@@ -109,18 +113,17 @@ for spine in ax1.spines.values():
     spine.set_color('black')
     spine.set_linewidth(1.5)
 
-out_dir = '/home/nikhil.repala/BRSM/Project/plots'
-os.makedirs(out_dir, exist_ok=True)
-out_path1 = os.path.join(out_dir, 'h1_acc_boxplot.png')
+out_path1 = os.path.join(out_dir, 'h1_acc_boxplot.png') # Keeping original filename for report consistency
 fig1.savefig(out_path1, dpi=300, bbox_inches='tight')
-print(f"Saved Accuracy Boxplot to {out_path1}")
+print(f"Saved Accuracy Violin Plot to {out_path1}")
 plt.close(fig1)
 
+# Response Time Violin Plot
 fig2, ax2 = plt.subplots(figsize=(8, 6))
 fig2.patch.set_facecolor('#ffffff')
 ax2.set_facecolor('#f9f9f9')
 
-sns.boxplot(data=df_res, x='Condition', y='ResponseTime', ax=ax2, palette=palette, width=0.5, zorder=2)
+sns.violinplot(data=df_res, x='Condition', y='ResponseTime', ax=ax2, palette=palette, inner='quartile', zorder=2)
 sns.stripplot(data=df_res, x='Condition', y='ResponseTime', ax=ax2, color='black', alpha=0.3, jitter=True, zorder=3)
 ax2.set_title('Overall Recognition Response Time (H1)', fontsize=16, fontweight='bold', pad=15)
 ax2.set_ylabel('Participant Response Time (s)', fontsize=14)
@@ -132,7 +135,7 @@ for spine in ax2.spines.values():
     spine.set_color('black')
     spine.set_linewidth(1.5)
 
-out_path2 = os.path.join(out_dir, 'h1_rt_boxplot.png')
+out_path2 = os.path.join(out_dir, 'h1_rt_boxplot.png') # Keeping original filename for report consistency
 fig2.savefig(out_path2, dpi=300, bbox_inches='tight')
-print(f"Saved Response Time Boxplot to {out_path2}")
+print(f"Saved Response Time Violin Plot to {out_path2}")
 plt.close(fig2)

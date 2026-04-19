@@ -84,7 +84,7 @@ def rich_stats(series):
 stats_df = df_res.groupby(['Condition', 'FrameType'])['Accuracy'].apply(rich_stats).unstack()
 print(stats_df)
 
-out_dir = '/home/nikhil.repala/BRSM/Project/plots'
+out_dir = '/home/nikhil.repala/BRSM/Project/Plots_Stats_Test_Results'
 os.makedirs(out_dir, exist_ok=True)
 stats_path = os.path.join(out_dir, 'h2_descriptive_stats.csv')
 stats_df.to_csv(stats_path)
@@ -97,7 +97,8 @@ ax.set_facecolor('#f9f9f9')
 
 palette = {'Natural Cut (NB)': '#4C72B0', 'Abrupt Cut (AB)': '#C44E52'}
 
-sns.boxplot(data=df_res, x='FrameType', y='Accuracy', hue='Condition', ax=ax, palette=palette, width=0.6, zorder=2)
+# Accuracy Violin Plot per Frame Type
+sns.violinplot(data=df_res, x='FrameType', y='Accuracy', hue='Condition', ax=ax, palette=palette, inner='quartile', zorder=2, split=False)
 
 sns.stripplot(data=df_res, x='FrameType', y='Accuracy', hue='Condition', ax=ax,
               color='black', alpha=0.3, jitter=True, dodge=True, zorder=3)
@@ -116,9 +117,9 @@ for spine in ax.spines.values():
     spine.set_color('black')
     spine.set_linewidth(1.5)
 
-out_path = os.path.join(out_dir, 'h2_acc_frametype_boxplot.png')
+out_path = os.path.join(out_dir, 'h2_acc_frametype_boxplot.png') # Original name
 fig.savefig(out_path, dpi=300, bbox_inches='tight')
-print(f"Saved Hypothesis 2 Boxplot to {out_path}")
+print(f"Saved Hypothesis 2 Violin Plot to {out_path}")
 plt.close(fig)
 
 fig2, ax2 = plt.subplots(figsize=(8, 6))
@@ -126,10 +127,10 @@ fig2.patch.set_facecolor('#ffffff')
 ax2.set_facecolor('#f9f9f9')
 
 sns.pointplot(data=df_res, x='FrameType', y='Accuracy', hue='Condition', ax=ax2, 
-              palette=palette, dodge=True, markers=['o', 's'], capsize=.1, err_kws={'linewidth': 1.5})
+              palette=palette, dodge=True, markers=['o', 's'], capsize=.1, errorbar=('ci', 95))
 
 ax2.set_title('Accuracy Interaction: Frame Type x Condition (H2)', fontsize=16, fontweight='bold', pad=15)
-ax2.set_ylabel('Mean Participant Accuracy', fontsize=14)
+ax2.set_ylabel('Mean Participant Accuracy (95% CI)', fontsize=14)
 ax2.set_xlabel('Frame Type', fontsize=14)
 ax2.set_ylim(0.75, 0.95) 
 ax2.tick_params(labelsize=12)
@@ -142,5 +143,5 @@ for spine in ax2.spines.values():
 
 out_path2 = os.path.join(out_dir, 'h2_acc_frametype_pointplot.png')
 fig2.savefig(out_path2, dpi=300, bbox_inches='tight')
-print(f"Saved Hypothesis 2 Point Plot to {out_path2}")
+print(f"Saved Hypothesis 2 Point Plot (95% CI) to {out_path2}")
 plt.close(fig2)
