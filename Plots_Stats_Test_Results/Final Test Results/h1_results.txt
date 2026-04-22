@@ -1,0 +1,5 @@
+[H1] Overall Group Comparisons (Mann-Whitney U)
+  Accuracy: U=4254.50, p=0.0078
+    Effect Size (Cohen's d): 0.423
+  RT: U=3661.00, p=0.4689
+    Effect Size (Cohen's d): 0.118

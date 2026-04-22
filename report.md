@@ -40,6 +40,7 @@ The dataset records comprehensive data in three primary categories: baseline dem
     *   **Accuracy (`resp.corr`):** Binary output indicating if the correct target frame was selected (1 = Correct, 0 = Incorrect).
     *   **Speed (`resp.rt`):** Response time (in seconds) to make the recognition choice.
     *   **Confidence Rating & Speed (`conf_radio.response`, `conf_radio.rt`):** The participant’s self-reported certainty (scale of 1-5) and the time taken to provide this rating.
+    *   **Video Duration (`Duration`):** The length of the video clip in seconds (ranging from 17 to 57s).
 
 2.  **Test Stimuli Properties**
     *   **Frame Category (`target_img`, `lure_img`):** The image paths shown during testing. The target images indicate if the frame was situated right before a boundary (**BB**) or mid-event (**EM**).
@@ -111,7 +112,7 @@ The results of the normality tests are summarized in the table below:
 ### 5.2 Implications for Analysis
 Because primary metrics such as recognition accuracy and response times significantly violate the assumption of normality, we have adopted a **dual-track statistical approach**:
 1.  **Non-Parametric Tests:** We used the **Mann-Whitney U test** for robust group comparisons where normality was violated.
-2.  **Generalized Linear Models (GLM):** We used **Logistic Regression** for interaction modeling, allowing for high-fidelity simple effects analysis.
+2.  **Generalized Linear Models (GLM):** We used **Logistic Regression** and **Linear Regression** for interaction modeling, allowing for high-fidelity simple effects analysis.
 
 ---
 
@@ -137,22 +138,16 @@ Based on Event Segmentation Theory (EST), we predict that:
 
 ### Hypothesis 2: Accuracy Across Frame Types
 *   **Research Question:** Does an abrupt cut mostly mess up a person's memory for the exact moments right before the video cut out?
-
-**Part A: Before Boundary Frames (Directional)**
+  
 *   **Independent Variable (IV):** Video condition (Natural Cut vs. Abrupt Cut)
 *   **Dependent Variable (DV):** Recognition accuracy (`resp.corr`)
 *   **Statistical Test:** **GLM (Logistic Regression)**
 
-**Statements:**
+**Part A: Before Boundary Frames (Directional)**
 *   **H0 (Null):** There is no difference in recognition accuracy for before boundary frames between the Natural Cut and Abrupt Cut groups.
 *   **H1 (Alternate):** Recognition accuracy for before boundary frames is higher in the Natural Cut group than the Abrupt Cut group.
 
 **Part B: Event-Middle Frames (Non-Directional)**
-*   **Independent Variable (IV):** Video condition (Natural Cut vs. Abrupt Cut)
-*   **Dependent Variable (DV):** Recognition accuracy (`resp.corr`)
-*   **Statistical Test:** **GLM (Logistic Regression)**
-
-**Statements:**
 *   **H0 (Null):** There is no difference in recognition accuracy for event-middle frames between the Natural Cut and Abrupt Cut groups.
 *   **H1 (Alternate):** Recognition accuracy for event-middle frames does not differ significantly between the groups.
 
@@ -161,21 +156,15 @@ Based on Event Segmentation Theory (EST), we predict that:
 ### Hypothesis 3: Confidence and Correctness
 *   **Research Question:** Does watching an abruptly cut video make people doubt themselves more when they actually get the answer right?
 
-**Part A: Correct Responses (Directional)**
 *   **Independent Variable (IV):** Video condition (Natural Cut vs. Abrupt Cut)
 *   **Dependent Variable (DV):** Confidence Rating (`conf_radio.response`)
 *   **Statistical Test:** **GLM (Linear Regression)**
 
-**Statements:**
+**Part A: Correct Responses (Directional)**
 *   **H0 (Null):** There is no difference in confidence ratings for correct responses between the Natural Cut and Abrupt Cut groups.
 *   **H1 (Alternate):** Participants in the Natural Cut group will report higher confidence ratings for their correct responses compared to the Abrupt Cut group.
 
 **Part B: Incorrect Responses (Non-Directional)**
-*   **Independent Variable (IV):** Video condition (Natural Cut vs. Abrupt Cut)
-*   **Dependent Variable (DV):** Confidence Rating (`conf_radio.response`)
-*   **Statistical Test:** **GLM (Linear Regression)**
-
-**Statements:**
 *   **H0 (Null):** There is no difference in confidence ratings for incorrect responses between the Natural Cut and Abrupt Cut groups.
 *   **H1 (Alternate):** Confidence ratings for incorrect responses will not differ significantly between the two conditions.
 
@@ -184,21 +173,15 @@ Based on Event Segmentation Theory (EST), we predict that:
 ### Hypothesis 4: Confidence Calibration Across Frame Types
 *   **Research Question:** Do people only lose confidence in their memories for the exact moments that were disrupted by the cut?
 
-**Part A: Before Boundary Frames (Directional)**
 *   **Independent Variable (IV):** Video condition (Natural Cut vs. Abrupt Cut)
 *   **Dependent Variable (DV):** Confidence Rating (`conf_radio.response`)      
 *   **Statistical Test:** **GLM (Linear Regression)**
-
-**Statements:**
+*   
+**Part A: Before Boundary Frames (Directional)**
 *   **H0 (Null):** There is no difference in confidence ratings for before boundary frames between the Natural Cut and Abrupt Cut groups.
 *   **H1 (Alternate):** Participants in the Abrupt Cut group will report lower confidence ratings specifically for before boundary frames compared to the Natural Cut group.
 
 **Part B: Event-Middle Frames (Directional)**
-*   **Independent Variable (IV):** Video condition (Natural Cut vs. Abrupt Cut)
-*   **Dependent Variable (DV):** Confidence Rating (`conf_radio.response`)      
-*   **Statistical Test:** **GLM (Linear Regression)**
-
-**Statements:**
 *   **H0 (Null):** There is no difference in confidence ratings for event-middle frames between the Natural Cut and Abrupt Cut groups.
 *   **H1 (Alternate):** Participants in the Natural Cut group will report higher confidence ratings for event-middle frames than the Abrupt Cut group.
 
@@ -215,6 +198,21 @@ Based on Event Segmentation Theory (EST), we predict that:
 *   **H1 (Alternate):** Demographic factors have a significant effect on overall recognition accuracy.
 
 ---
+### Hypothesis 6: The Influence of Video Duration
+*   **Research Question:** Does a longer video provide enough context to "protect" memory from the jarring effect of a sudden cut?
+*   **Independent Variables (IV):** Video duration (continuous) and Video condition (Natural Cut vs. Abrupt Cut)
+*   **Dependent Variable (DV):** Recognition accuracy (`resp.corr`), Response Time (`resp.rt`), Confidence Rating (`conf_radio.response`)
+*   **Statistical Tests:** **GLM (Logistic and Linear Regression)**
+
+**Part A: The Impact of Video Duration**
+*   **H0 (Null):** There is no difference in recognition accuracy, response times, or confidence ratings across varying video durations.
+*   **H1 (Alternate):** Increased video duration will lead to significantly higher recognition accuracy, faster response times, and higher confidence ratings.
+
+**Part B: Interaction Between Context Length and Boundary Type**
+*   **H0 (Null):** There is no difference in how video duration affects memory performance between the Natural Cut and Abrupt Cut groups.
+*   **H1 (Alternate):** Increased video duration will significantly reduce the performance gap between the Natural Cut and Abrupt Cut groups.
+
+---
 
 ## 7. Statistical Analysis
 ### Terminology
@@ -227,15 +225,15 @@ Based on Event Segmentation Theory (EST), we predict that:
 | **IQR** | Interquartile Range: the distance between the 25th and 75th percentiles — measures the spread of the middle 50% of the data    |
 | **U**   | Mann-Whitney U Statistic: used for non-parametric group comparisons when data is not normally distributed                      |
 | **GLM** | Generalized Linear Model: a flexible statistical model used to analyze interactions and "simple effects" at specific levels    |
-| **p**     | p-value: the probability that the observed result happened by chance; values below 0.05 are typically considered "significant"           |
-| **d**     | Cohen's d: Effect size measuring the standardized difference between means (0.2=small, 0.5=medium, 0.8=large)                          |
-| **OR**    | Odds Ratio: Effect size for logistic regression; represents the odds of an outcome occurring in one group vs another                    |
+| **p**   | p-value: the probability that the observed result happened by chance; values below 0.05 are typically considered "significant" |
+| **d**   | Cohen's d: Effect size measuring the standardized difference between means (0.2=small, 0.5=medium, 0.8=large)                  |
+| **OR**  | Odds Ratio: Effect size for logistic regression; represents the odds of an outcome occurring in one group vs another           |
 
 ---
 ### Hypothesis 1: Overall Accuracy and Response Time
-![Overall Recognition Accuracy Violin Plot](Plots_Stats_Test_Results/Plots/h1_acc_violinplot.png)
+![Overall Recognition Accuracy Violin Plot](Plots_Stats_Test_Results/Plots/h1_acc.png)
 
-![Overall Recognition Response Time Violin Plot](Plots_Stats_Test_Results/Plots/h1_rt_violinplot.png)
+![Overall Recognition Response Time Violin Plot](Plots_Stats_Test_Results/Plots/h1_rt.png)
 
 #### Descriptive Statistics (H1)
 | Variable          | Group            |   n   |   M   |  SD   |    IQR (Q25–Q75)    |
@@ -246,10 +244,10 @@ Based on Event Segmentation Theory (EST), we predict that:
 | Response Time (s) | Abrupt Cut (AB)  |  79   | 5.581 | 1.484 | 1.486 (4.688–6.174) |
 
 #### Inferential Statistics (H1)
-| Test                  | Method         |    Result (U/p)    | Effect Size (d) | Sig. |
-| :-------------------- | :------------- | :----------------: | :-------------: | :--: |
-| Overall Accuracy      | Mann-Whitney U | U=4254.5, p=0.0078 |      0.423      |  **  |
-| Overall Response Time | Mann-Whitney U | U=3661.0, p=0.4689 |      0.118      |  ns  |
+| Test                  | Method         |    Result (U/p)    | Effect Size (d) | Sig.  |
+| :-------------------- | :------------- | :----------------: | :-------------: | :---: |
+| Overall Accuracy      | Mann-Whitney U | U=4254.5, p=0.0078 |      0.423      |  **   |
+| Overall Response Time | Mann-Whitney U | U=3661.0, p=0.4689 |      0.118      |  ns   |
 
 #### Final Analysis (H1)
 *   **Accuracy:** The Natural Cut (NB) group achieved significantly higher accuracy than the Abrupt Cut (AB) group ($p = 0.0078$). The effect size ($d = 0.423$) represents a moderate impact on memory performance. We **reject the null hypothesis ($H_0$)** and support the alternate hypothesis ($H_1$).
@@ -271,10 +269,10 @@ Based on Event Segmentation Theory (EST), we predict that:
 | Accuracy | Abrupt Cut (AB)  | Event Middle    |  79   | 0.854 | 0.093 | 0.150 (0.800–0.950) |
 
 #### Inferential Statistics (H2)
-| Test                                | Method                     | Result (p) | Effect Size (d) | Sig. |
-| :---------------------------------- | :------------------------- | :--------: | :-------------: | :--: |
-| Accuracy — Before Boundary: NB > AB | GLM (Logistic) Simple Eff. |   0.0041   |      0.356      |  **  |
-| Accuracy — Event Middle: NB vs AB   | GLM (Logistic) Simple Eff. |   0.0137   |      0.337      |  *   |
+| Test                                | Method                     | Result (p) | Effect Size (d) | Sig.  |
+| :---------------------------------- | :------------------------- | :--------: | :-------------: | :---: |
+| Accuracy — Before Boundary: NB > AB | GLM (Logistic) Simple Eff. |   0.0041   |      0.356      |  **   |
+| Accuracy — Event Middle: NB vs AB   | GLM (Logistic) Simple Eff. |   0.0137   |      0.337      |   *   |
 
 #### Final Analysis (H2)
 *   **Before Boundary:** Accuracy was significantly higher for the Natural Cut group than the Abrupt Cut group ($p = 0.0041$). The effect size ($d = 0.356$) indicates a small-to-moderate impact of the cut on boundary memory. We **reject the null hypothesis ($H_0$)** and support the alternate hypothesis ($H_1$).
@@ -296,10 +294,10 @@ Based on Event Segmentation Theory (EST), we predict that:
 | Confidence | Abrupt Cut (AB)  | Incorrect   |  79   | 3.362 | 0.787 | 1.194 (2.806–4.000) |
 
 #### Inferential Statistics (H3)
-| Test                                       | Method                   | Result (p) | Effect Size (d) | Sig. |
-| :----------------------------------------- | :----------------------- | :--------: | :-------------: | :--: |
-| Confidence — Correct Responses: NB > AB    | GLM (Linear) Simple Eff. |  < 0.001   |      0.107      | ***  |
-| Confidence — Incorrect Responses: NB vs AB | GLM (Linear) Simple Eff. |   0.6702   |      0.007      |  ns  |
+| Test                                       | Method                   | Result (p) | Effect Size (d) | Sig.  |
+| :----------------------------------------- | :----------------------- | :--------: | :-------------: | :---: |
+| Confidence — Correct Responses: NB > AB    | GLM (Linear) Simple Eff. |   0.0001   |      0.107      |  ***  |
+| Confidence — Incorrect Responses: NB vs AB | GLM (Linear) Simple Eff. |   0.6702   |      0.007      |  ns   |
 
 #### Final Analysis (H3)
 *   **Correct Responses:** The Natural Cut group reported significantly higher confidence when they were correct ($p < 0.001$). The effect size ($d = 0.107$) is small, indicating that while the difference is consistent, participants' confidence levels were relatively close across groups. We **reject the null hypothesis ($H_0$)** and support the alternate hypothesis ($H_1$).
@@ -321,10 +319,10 @@ Based on Event Segmentation Theory (EST), we predict that:
 | Confidence | Abrupt Cut (AB)  | Event Middle    |  79   | 4.119 | 0.461 | 0.725 (3.725–4.450) |
 
 #### Inferential Statistics (H4)
-| Test                                  | Method                   | Result (p) | Effect Size (d) | Sig. |
-| :------------------------------------ | :----------------------- | :--------: | :-------------: | :--: |
-| Confidence — Before Boundary: NB > AB | GLM (Linear) Simple Eff. |  < 0.001   |      0.150      | ***  |
-| Confidence — Event Middle: NB vs AB   | GLM (Linear) Simple Eff. |   0.0212   |      0.198      |  *   |
+| Test                                  | Method                   | Result (p) | Effect Size (d) | Sig.  |
+| :------------------------------------ | :----------------------- | :--------: | :-------------: | :---: |
+| Confidence — Before Boundary: NB > AB | GLM (Linear) Simple Eff. |  < 0.001   |      0.150      |  ***  |
+| Confidence — Event Middle: NB vs AB   | GLM (Linear) Simple Eff. |   0.0212   |      0.198      |   *   |
 
 #### Final Analysis (H4)
 *   **Before Boundary:** Confidence was significantly lower in the Abrupt Cut group for frames immediately preceding the cut ($p < 0.001, d = 0.150$). We **reject the null hypothesis ($H_0$)** and support the alternate hypothesis ($H_1$).
@@ -352,15 +350,43 @@ Based on Event Segmentation Theory (EST), we predict that:
 | Accuracy | Corrected Vision |  71   | 0.855 | 0.077 | 0.100 (0.800–0.900) |
 
 #### Inferential Statistics (H5)
-| Test                       | Method                  | Result (p) | Effect Size (d) | Sig. |
-| :------------------------- | :---------------------- | :--------: | :-------------: | :--: |
-| Age                        | GLM (Linear Regression) |   0.130    |        -        |  ns  |
-| Gender (Male vs Female)    | GLM (Linear Regression) |   0.064    |      0.354      |  ns  |
-| Handedness (Right vs Left) | GLM (Linear Regression) |   0.051    |      0.605*     |  ns  |
-| Vision Status              | GLM (Linear Regression) |   0.880    |      0.013      |  ns  |
+| Test                       | Method                  | Result (p) | Effect Size (d) | Sig.  |
+| :------------------------- | :---------------------- | :--------: | :-------------: | :---: |
+| Age                        | GLM (Linear Regression) |   0.130    |        -        |  ns   |
+| Gender (Male vs Female)    | GLM (Linear Regression) |   0.064    |      0.354      |  ns   |
+| Handedness (Right vs Left) | GLM (Linear Regression) |   0.051    |      0.605      |  ns   |
+| Vision Status              | GLM (Linear Regression) |   0.880    |      0.013      |  ns   |
 
 #### Final Analysis (H5)
 *   No individual demographic factors—Age ($p=0.130$), Gender ($p=0.064, d=0.354$), Handedness ($p=0.051, d=0.605$), or Vision Status ($p=0.880, d=0.013$)—showed a significant effect on recognition accuracy (all $p > 0.05$). Consequently, we **fail to reject the null hypothesis ($H_0$)** regarding the impact of demographic characteristics on this task.
+
+---
+
+### Hypothesis 6: The Influence of Video Duration
+![Accuracy vs Duration](Plots_Stats_Test_Results/Plots/h6_accuracy_vs_duration.png)
+![RT vs Duration](Plots_Stats_Test_Results/Plots/h6_rt_vs_duration.png)
+![Confidence vs Duration](Plots_Stats_Test_Results/Plots/h6_confidence_vs_duration.png)
+
+#### Part A: The Impact of Video Duration
+| Measure        | Result (p) | Significance | Interpretation                                  |
+| :------------- | :--------: | :----------: | :---------------------------------------------- |
+| **Accuracy**   |  < 0.001   |     ***      | Duration significantly increases accuracy.      |
+| **Speed (RT)** |  < 0.001   |     ***      | Duration significantly speeds up response time. |
+| **Confidence** |  < 0.001   |     ***      | Duration significantly increases confidence.    |
+
+#### Part B: Interaction Between Context and Boundary Type
+| Measure        | Predictor Tested    | Result (p) | Significance |
+| :------------- | :------------------ | :--------: | :----------: |
+| **Accuracy**   | Duration × Cut Type |   0.528    |      ns      |
+| **Speed (RT)** | Duration × Cut Type |   0.933    |      ns      |
+| **Confidence** | Duration × Cut Type |   0.997    |      ns      |
+
+#### Final Analysis (H6)
+*   **The Positive Impact of Context:** Video duration has a powerful and highly significant main effect across accuracy, response time, and confidence ($p < 0.001$). Providing more context consistently leads to better, faster, and more confident memory performance.
+  
+*   **The Invariance of the Boundary Cost:** Crucially, the interaction between duration and boundary condition was not significant for any metric (all $p > 0.05$). This indicates that while longer videos improve overall memory, they do not reduce the drop in performance caused by abrupt cuts. The memory difference between natural and abrupt boundaries stays the same regardless of how much preceding context is provided.
+
+---
 
 Significance codes: *** = p < 0.001,  ** = p < 0.01,  * = p < 0.05,  ns = not significant
 
@@ -389,19 +415,18 @@ Based on the statistical analysis and effect size calculations, the following st
 ### Hypothesis 5
 - **Demographic Factors:** Demographic factors (gender, age, handedness, and vision) have no significant effect on overall recognition accuracy.
 
+### Hypothesis 6
+- **Benefit of Context:** Longer video durations provide more narrative context, which significantly improves recognition accuracy, response speed, and confidence.
+- **Persistence of Boundary Disruption:** Increased context length does not diminish the performance gap between Natural and Abrupt cuts. The disruptive effect of the abrupt cut remains statistically stable, regardless of how much context is provided.
+
 ---
 
 ## 9. Future Steps
 
 While our results clearly show that abrupt cuts make it harder for people to remember what they saw, this is just the beginning of the story. If we were to take this research further, here are some interesting directions we could explore:
 
-### 8.1 New Questions to Dive Into
+### 9.1 New Questions to Dive Into
 *   **Is it "Bad Memory" or just "Guessing"?** Right now, we know people in the Abrupt Cut group score lower, but we don't know *why*. Using a technique called **Signal Detection Theory**, we could figure out if they actually have a weaker memory of the images, or if they're just becoming more likely to "guess" incorrectly because they're frustrated by the choppy video.
-*   **Does Video Length Matter?** Does a longer video provide enough context to "protect" your memory from a sudden cut? Or does a cut in a 2-minute scene feel even more jarred than in a 10-second clip? We'd love to see if the duration of the story changes how much these boundaries matter.
-
-### 8.2 Expanded Analysis
-To get an even clearer picture, we could use some more advanced statistical tools:
-*   **ANOVA Testing:** This would let us look at how different factors (like cut type and frame category) interact with each other in one big test, rather than doing them separately.
 
 ---
 

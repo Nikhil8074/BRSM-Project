@@ -15,6 +15,17 @@ def load_participant_data():
     all_files = glob.glob(os.path.join(DATA_DIR, '*.csv'))
     records = []
     
+    # Load movie durations
+    abrupt_movies = pd.read_csv('./BRSM data csv/abruptmovies.csv')
+    natural_movies = pd.read_csv('./BRSM data csv/naturalmovies.csv')
+    
+    # Extract movie_id from path/metadata if not already explicit
+    # movie_id in participant files usually starts from 1
+    # We can create a mapping for movie_id -> duration
+    # Since movie_id is 1-indexed and corresponds to the order in the csv
+    ab_durations = {i+1: row['duration'] for i, row in abrupt_movies.iterrows()}
+    nb_durations = {i+1: row['duration'] for i, row in natural_movies.iterrows()}
+    
     for file in all_files:
         filename = os.path.basename(file)
         match = re.search(r'sub(\d+)_(NB|AB)', filename)
@@ -51,6 +62,11 @@ def load_participant_data():
             if 'target_img' in df.columns:
                 trials['FrameType'] = trials['target_img'].astype(str).apply(
                     lambda x: 'BB' if 'BB' in x.upper() else ('EM' if 'EM' in x.upper() else 'Unknown'))
+            
+            # Map duration
+            dur_map = ab_durations if condition == 'AB' else nb_durations
+            if 'movie_id' in trials.columns:
+                trials['Duration'] = trials['movie_id'].map(dur_map)
             
             records.append({
                 'sub_id': sub_id, 
