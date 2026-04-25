@@ -166,8 +166,7 @@ Based on Event Segmentation Theory (EST), we predict that:
 
 **Part B: Incorrect Responses (Non-Directional)**
 *   **H0 (Null):** There is no difference in confidence ratings for incorrect responses between the Natural Cut and Abrupt Cut groups.
-*   **H1 (Alternate):** Confidence ratings for incorrect responses will not differ significantly between the two conditions.
-
+*   **H1 (Alternate):** Participants in the Abrupt Cut group will report lower confidence ratings for their incorrect responses compared to the Natural Cut group.
 ---
 
 ### Hypothesis 4: Confidence Calibration Across Frame Types
